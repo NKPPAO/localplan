@@ -158,6 +158,240 @@
     </div>
   </div>
 </div>
+
+  <div id="loginModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur hidden flex items-center justify-center z-[60]">
+  <div class="bg-white p-8 rounded-3xl shadow-2xl w-80 text-center mx-4">
+    <h3 class="text-xl font-bold mb-4">ผู้ดูแลระบบ</h3>
+    <input type="username" id="userInput" class="w-full border-2 border-slate-100 p-3 rounded-2xl mb-6 text-center outline-none" placeholder="Username">
+    <input type="password" id="passInput" class="w-full border-2 border-slate-100 p-3 rounded-2xl mb-6 text-center outline-none" placeholder="Password">
+    <div class="flex space-x-2">
+      <button onclick="toggleLoginModal(false)" class="flex-1 text-slate-400 font-bold">ยกเลิก</button>
+      <button onclick="doLogin()" class="flex-1 bg-blue-600 text-white p-2 rounded-2xl font-bold">ตกลง</button>
+    </div>
+  </div>
+</div>
+
+  <div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur hidden flex items-center justify-center z-[60] p-4">
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh]">
+    
+    <div class="p-6 pb-2 border-b">
+      <h3 class="text-lg font-bold text-blue-900 text-center">อัปเดตโครงการ</h3>
+    </div>
+
+    <div class="p-6 overflow-y-auto custom-scroll space-y-4 flex-1">
+      
+      <div>
+        <label class="text-[14px] font-bold text-slate-400 uppercase">สถานะโครงการ</label>
+        <select id="editStatus" class="w-full border-2 border-slate-50 p-3 rounded-2xl outline-none bg-slate-50">
+          <option>ยังไม่ได้ดำเนินการ</option>
+          <option>อยู่ระหว่างดำเนินการ</option>
+          <option>ดำเนินการแล้วเสร็จ</option>
+          <option>ยกเลิก</option>
+        </select>
+      </div>
+
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <label class="text-[14px] font-bold text-slate-500 uppercase tracking-widest block mb-2">หน้าแผนพัฒนาฯ (แผนหลัก)</label>
+        <div class="flex items-center space-x-2">
+          <div class="flex-1 bg-white p-2 px-4 rounded-xl border border-slate-200 text-sm text-slate-500 font-medium truncate">
+            เดิม: <span id="oldMainPage"></span>
+          </div>
+          <input type="number" id="editMainPage" placeholder="หน้าใหม่" class="w-24 p-2 rounded-xl border border-blue-200 text-sm outline-none">
+        </div>
+      </div>
+
+      <div class="bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
+        <label class="text-[14px] font-bold text-blue-400 uppercase tracking-widest block mb-2">เพิ่มรายการแก้ไข/เปลี่ยนแปลง</label>
+        <div class="space-y-2">
+          <select id="planSelect" class="w-full p-2 rounded-xl border border-slate-200 text-sm outline-none">
+             <option value="">-- เลือกแผนพัฒนาฯ --</option>
+          </select>
+          <div class="flex space-x-2">
+            <input type="number" id="planPage" placeholder="หน้า" class="flex-1 p-2 rounded-xl border border-slate-200 text-sm outline-none">
+            <button onclick="addPlanItem()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold">+ เพิ่ม</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-[14px] font-bold text-slate-400 uppercase block mb-2">รายการแผนที่เพิ่มเติม/เปลี่ยนแปลง</label>
+        <div id="selectedPlansList" class="space-y-2 p-2 border-2 border-dashed border-slate-100 rounded-2xl">
+           </div>
+      </div>
+
+    </div>
+
+    <div class="p-6 border-t flex justify-center space-x-3 bg-slate-50 rounded-b-3xl">
+      <button onclick="closeEditModal()" class="px-6 py-2 text-slate-400 font-bold hover:text-slate-600 transition">ปิด</button>
+      <button id="saveBtn" onclick="submitEdit()" class="bg-blue-600 text-white px-8 py-2 rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition">บันทึกข้อมูล</button>
+    </div>
+
+  </div>
+</div>
+
+  <div id="planModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur hidden flex items-center justify-center z-[70] p-4">
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh]">
+    
+    <div class="p-6 pb-2 border-b">
+      <h3 class="text-lg font-bold text-indigo-900 flex items-center justify-between">
+        <span>จัดการรายการแผนพัฒนาฯ</span>
+        <button onclick="document.getElementById('planModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+        </button>
+      </h3>
+    </div>
+    
+    <div class="p-6 overflow-y-auto flex-1 custom-scroll">
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6 bg-indigo-50 p-4 rounded-2xl sticky top-0 z-10 shadow-sm border border-indigo-100">
+        <input type="hidden" id="editPlanOldName"> 
+        
+        <div class="md:col-span-1">
+          <label class="text-[14px] font-bold text-indigo-400 uppercase">ชื่อแผน</label>
+          <input type="text" id="newPlanName" placeholder="เช่น แผน 66" class="w-full p-2 rounded-xl border-none outline-none text-sm focus:ring-2 focus:ring-indigo-300">
+        </div>
+        
+        <div class="md:col-span-1">
+          <label class="text-[14px] font-bold text-indigo-400 uppercase">ลิงก์ PDF</label>
+          <input type="text" id="newPlanUrl" placeholder="https://..." class="w-full p-2 rounded-xl border-none outline-none text-sm focus:ring-2 focus:ring-indigo-300">
+        </div>
+        
+        <div class="flex items-end gap-2">
+          <div class="flex-1">
+            <label class="text-[14px] font-bold text-indigo-400 uppercase">หน้าแรก</label>
+            <input type="number" id="newPlanOffset" value="1" class="w-full p-2 rounded-xl border-none outline-none text-sm focus:ring-2 focus:ring-indigo-300">
+          </div>
+          
+          <div class="flex gap-1">
+            <button id="btnSubmitPlan" onclick="submitNewPlan()" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-md hover:bg-indigo-700 transition">เพิ่ม</button>
+            <button id="btnCancelEditPlan" onclick="resetPlanForm()" class="hidden bg-slate-400 text-white px-3 py-2 rounded-xl font-bold text-sm shadow-md hover:bg-slate-500 transition">ยกเลิก</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="text-[14px] text-slate-400 uppercase border-b">
+              <th class="pb-2 font-bold px-2">ชื่อแผน</th>
+              <th class="pb-2 font-bold px-2">หน้าแรก</th>
+              <th class="pb-2 font-bold text-center px-2">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="planTableBody" class="text-sm divide-y divide-slate-100">
+            </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="p-4 border-t bg-slate-50 rounded-b-3xl text-center">
+      <button onclick="document.getElementById('planModal').classList.add('hidden')" class="text-slate-500 font-bold text-sm">ปิดหน้าต่าง</button>
+    </div>
+
+  </div>
+</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<div id="uploadModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur hidden flex items-center justify-center z-[70]">
+  <div class="bg-white p-6 rounded-3xl shadow-2xl w-full max-w-md mx-4">
+    <div class="flex justify-between items-center mb-4">
+      <div class="flex items-center gap-2">
+        <h3 class="text-lg font-bold text-slate-800">อัปโหลดไฟล์ Excel</h3>
+        <button onclick="downloadTemplate()" title="ดาวน์โหลดไฟล์ตัวอย่าง" class="flex items-center gap-1 px-2 py-1 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition text-[14px] font-bold border border-indigo-100">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0L8 8m4-4v12" stroke-width="2" stroke-linecap="round"></path></svg>
+          ตัวอย่างไฟล์นำเข้าข้อมูล
+        </button>
+      </div>
+      <button onclick="toggleUploadModal(false)" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
+    </div>
+    
+    <div 
+      id="dropZone" 
+      class="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center transition-all duration-300 group bg-slate-50/50"
+      onprefix="prevent" 
+    >
+      <input type="file" id="excelFile" class="hidden" accept=".xlsx, .xls" onchange="handleFile(this)">
+      <label for="excelFile" class="cursor-pointer block">
+        <div id="dropZoneIcon" class="bg-white text-emerald-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <p class="text-sm font-bold text-slate-600">ลากไฟล์มาวางที่นี่ หรือ <span class="text-emerald-600">คลิกเพื่อเลือก</span></p>
+        <p class="text-[14px] text-slate-400 mt-2 uppercase tracking-wider font-semibold">รองรับไฟล์ .xlsx หรือ .xls</p>
+      </label>
+    </div>
+
+    <div id="fileInfo" class="mt-4 hidden animate-fade-in">
+      <div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 p-3 rounded-2xl">
+        <div class="flex items-center overflow-hidden">
+          <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"></path></svg>
+          <span id="fileName" class="text-xs font-bold text-emerald-700 truncate"></span>
+        </div>
+        <button onclick="processUpload()" class="bg-emerald-600 text-white px-5 py-2 rounded-xl font-bold text-xs shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:-translate-y-0.5 transition-all">
+          เริ่มอัปโหลด
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div id="settingsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur hidden flex items-center justify-center z-[80] p-4">
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md flex flex-col overflow-hidden">
+    <div class="p-6 border-b bg-slate-50">
+      <h3 class="text-lg font-bold text-slate-800">แก้ไขข้อมูลระบบ</h3>
+    </div>
+    
+    <div class="p-6 space-y-4">
+      <div>
+        <label class="text-[14px] font-bold text-slate-400 uppercase">หัวข้อหลัก (Header)</label>
+        <input type="text" id="set-header" class="w-full p-3 bg-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      </div>
+      <div>
+        <label class="text-[14px] font-bold text-slate-400 uppercase">คำอธิบาย (Sub-header)</label>
+        <textarea id="set-sub-header" rows="3" class="w-full p-3 bg-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm"></textarea>
+      </div>
+      <div>
+        <label class="text-[14px] font-bold text-slate-400 uppercase">ข้อความส่วนท้าย (Footer)</label>
+        <input type="text" id="set-footer" class="w-full p-3 bg-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+      </div>
+    </div>
+
+    <div class="p-6 border-t flex justify-end gap-3">
+      <button onclick="closeSettingsModal()" class="px-4 py-2 text-slate-400 font-bold">ยกเลิก</button>
+      <button onclick="submitSettings()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">บันทึกการเปลี่ยนแปลง</button>
+    </div>
+  </div>
+</div>
+
+  <footer class="bg-white border-t border-slate-100 mt-2">
+  <div class="max-w-7xl mx-auto px-4 py-4">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-3">
+      
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center shadow-sm overflow-hidden border border-blue-100">
+          <img 
+            src="https://www.nkppao.go.th/customers/webpages/images/master_001.png" 
+            alt="NKPPAO Logo" 
+            class="w-6 h-6 object-contain"
+          >
+        </div>
+        <span id="footerText" class="text-sm font-bold text-slate-700 uppercase">
+          ระบบค้นหาโครงการที่เกินศักยภาพขององค์กรปกครองส่วนท้องถิ่น อบจ.นครปฐม
+        </span>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center gap-3 md:gap-6">
+        <div class="flex space-x-4 text-[11px] font-medium text-slate-400">
+          <a href="https://www.nkppao.go.th" target="_blank" class="hover:text-blue-600 transition hidden md:block">เว็บไซต์ อบจ.</a>
+          <p class="text-[11px] text-slate-400 border-l pl-4 hidden md:block">
+            &copy; 2026 Nakhon Pathom PAO. ฝ่ายนโยบายและแผนงาน กองยุทธศาสตร์และงบประมาณ
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</footer>
 <script>
   let filteredData = [];
   let isAdmin = false;
