@@ -104,3 +104,10 @@ app.put("/api/projects/:id", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
+
+app.use(express.static("views")); // บอกให้ server รู้ว่าไฟล์หน้าบ้านอยู่ที่โฟลเดอร์ views
+
+// เมื่อเข้าหน้าแรก (/) ให้ส่งไฟล์ index.html ไปให้ Browser
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "index.html"));
+});
