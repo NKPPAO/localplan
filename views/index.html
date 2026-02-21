@@ -45,6 +45,119 @@
     </button>
   </div>
 </div>
+
+  <div class="container mx-auto px-4 -mt-24">
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+    <div onclick="filterByStatus('ยังไม่ได้ดำเนินการ')" class="bg-white p-4 rounded-2xl shadow-sm border-b-4 border-slate-300 cursor-pointer hover:bg-slate-50 transition-all active:scale-95">
+      <div class="text-slate-500 text-[14px] font-bold mb-1">ยังไม่ได้ดำเนินการ</div>
+      <div id="stat1" class="text-2xl font-bold">0</div>
+    </div>
+    
+    <div onclick="filterByStatus('อยู่ระหว่างดำเนินการ')" class="bg-white p-4 rounded-2xl shadow-sm border-b-4 border-blue-500 cursor-pointer hover:bg-blue-50 transition-all active:scale-95">
+      <div class="text-blue-500 text-[14px] font-bold mb-1">อยู่ระหว่างดำเนินการ</div>
+      <div id="stat2" class="text-2xl font-bold">0</div>
+    </div>
+
+    <div onclick="filterByStatus('ดำเนินการแล้วเสร็จ')" class="bg-white p-4 rounded-2xl shadow-sm border-b-4 border-emerald-500 cursor-pointer hover:bg-emerald-50 transition-all active:scale-95">
+      <div class="text-emerald-500 text-[14px] font-bold mb-1">ดำเนินการแล้วเสร็จ</div>
+      <div id="stat3" class="text-2xl font-bold">0</div>
+    </div>
+
+    <div onclick="filterByStatus('ยกเลิก')" class="bg-white p-4 rounded-2xl shadow-sm border-b-4 border-red-500 cursor-pointer hover:bg-red-50 transition-all active:scale-95">
+      <div class="text-red-500 text-[14px] font-bold mb-1">ยกเลิก</div>
+      <div id="stat4" class="text-2xl font-bold">0</div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-xl p-5 mb-6 border border-slate-100">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
+    
+    <div>
+      <label class="text-[14px] font-bold text-slate-400 mb-1 block">เลือกอำเภอ</label>
+      <select id="sAmphoe" onchange="filterData()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+        <option value="">ทั้งหมดทุกอำเภอ</option>
+        <option value="เมืองนครปฐม">เมืองนครปฐม</option>
+        <option value="นครชัยศรี">นครชัยศรี</option>
+        <option value="สามพราน">สามพราน</option>
+        <option value="ดอนตูม">ดอนตูม</option>
+        <option value="บางเลน">บางเลน</option>
+        <option value="กำแพงแสน">กำแพงแสน</option>
+        <option value="พุทธมณฑล">พุทธมณฑล</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="text-[14px] font-bold text-slate-400 mb-1 block">ชื่อ อปท.</label>
+      <input type="text" id="sOpt" onkeyup="filterData()" placeholder="ชื่อ อปท..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+    </div>
+
+    <div>
+      <label class="text-[14px] font-bold text-slate-400 mb-1 block">ชื่อโครงการ</label>
+      <input type="text" id="sProject" onkeyup="filterData()" placeholder="ค้นหาโครงการ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+    </div>
+
+    <div>
+      <label class="text-[14px] font-bold text-slate-400 mb-1 block">สถานะ</label>
+      <select id="sStatus" onchange="filterData()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+        <option value="">ทั้งหมด</option>
+        <option>ยังไม่ได้ดำเนินการ</option>
+        <option>อยู่ระหว่างดำเนินการ</option>
+        <option>ดำเนินการแล้วเสร็จ</option>
+        <option>ยกเลิก</option>
+      </select>
+    </div>
+
+    <div class="lg:col-span-2 space-y-2">
+  <div id="actionBtnContainer" class="flex gap-2 items-end h-full">
+    
+    <button onclick="clearSearch()" title="ล้างการค้นหา" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-500 py-2 rounded-xl transition-all flex items-center justify-center border border-slate-200 shadow-sm">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-width="2" stroke-linecap="round"></path></svg>
+    </button>
+    
+    <button onclick="exportToExcel()" title="Excel" class="flex-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-100 py-2 rounded-xl transition-all flex items-center justify-center shadow-sm">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"></path></svg>
+    </button>
+
+    <div id="planAdminBtn" class="contents"></div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<div id="loadingLine" class="h-1 w-full overflow-hidden bg-slate-100 hidden">
+    <div class="progress-line w-full h-full bg-blue-500"></div>
+</div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-10">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse min-w-full">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-200">
+            <th class="p-4 lg:hidden w-10 text-center"></th>
+            <th class="p-4 w-12 text-center font-bold text-slate-500 text-[14px]">#</th>
+            <th id="thCheckbox" class="p-4 w-10 text-center hidden">
+  <input type="checkbox" id="checkAll" onclick="toggleCheckAll(this)" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+</th>
+            <th class="p-4 font-bold text-slate-500 text-[14px] col-main">อำเภอ / อปท.</th>
+            <th class="p-4 font-bold text-slate-500 text-[14px] hidden lg:table-cell">ชื่อโครงการ</th>
+            <th class="p-4 font-bold text-slate-500 text-[14px] hidden sm:table-cell">อ้างอิงแผน</th>
+            <th class="p-4 font-bold text-slate-500 text-[14px] text-center hidden md:table-cell">สถานะ</th>
+            <th id="thAdmin" class="p-4 font-bold text-slate-500 text-[14px] text-center hidden">จัดการ</th>
+          </tr>
+        </thead>
+        <tbody id="mainTable">
+          <tr><td colspan="8" class="p-10 text-center">กำลังโหลดข้อมูล...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div id="pInfo" class="text-[13px] text-slate-500">พบข้อมูลทั้งหมด 0 รายการ</div>
+      <nav id="paginationNav" class="inline-flex rounded-lg border border-slate-300 bg-white overflow-hidden shadow-sm"></nav>
+    </div>
+  </div>
+</div>
 <script>
   let filteredData = [];
   let isAdmin = false;
