@@ -1,11 +1,14 @@
-const express = require("express");
-const app = express();
+const mysql = require("mysql2");
 
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("API RUNNING");
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT);
+db.connect(err => {
+  if (err) console.log(err);
+  else console.log("MySQL Connected");
+});
