@@ -7,3 +7,7 @@ const db = mysql.createConnection({
   database: process.env.MYSQLDATABASE,
   port: process.env.MYSQLPORT
 });
+
+app.get("/", (req, res) => {
+  res.send("API RUNNING");
+});
